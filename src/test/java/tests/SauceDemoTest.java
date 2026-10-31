@@ -25,7 +25,7 @@ public class SauceDemoTest extends BaseTest {
         InventoryPage inventoryPage = new InventoryPage(driver);
         Assert.assertTrue(inventoryPage.isAtInventoryPage(),
                 "Successful login should navigate to the inventory page.");
-        Assert.assertEquals(inventoryPage.getPageTitle(), "Productss");
+        Assert.assertEquals(inventoryPage.getPageTitle(), "Products");
     }
 
     @Test
