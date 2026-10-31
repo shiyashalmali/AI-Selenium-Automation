@@ -23,7 +23,7 @@ jobs:
           java-version: '17'
           cache: maven
 
-            - name: Run Selenium tests
+      - name: Run Selenium tests
         run: mvn -B clean test
 
       - name: Generate Allure Report
