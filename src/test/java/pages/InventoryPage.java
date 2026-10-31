@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import io.qameta.allure.Step;
 
 import java.time.Duration;
 import java.util.List;
@@ -45,6 +46,7 @@ public class InventoryPage {
         return getFirstProduct().findElement(By.className("inventory_item_price")).getText();
     }
 
+    @Step("Add the first product to the cart")
     public void addFirstProductToCart() {
         WebElement addButton = getFirstProduct().findElement(By.cssSelector("button.btn_inventory"));
         wait.until(ExpectedConditions.elementToBeClickable(addButton)).click();
@@ -61,6 +63,7 @@ public class InventoryPage {
         return Integer.parseInt(driver.findElement(cartBadge).getText());
     }
 
+    @Step("Open the shopping cart")
     public void openCart() {
         wait.until(ExpectedConditions.elementToBeClickable(cartLink)).click();
     }

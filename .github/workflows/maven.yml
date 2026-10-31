@@ -25,3 +25,15 @@ jobs:
 
       - name: Run Selenium tests
         run: mvn -B clean test
+
+      - name: Generate Allure Report
+        if: always()
+        run: mvn -B allure:report
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: target/allure-results/
+          if-no-files-found: warn

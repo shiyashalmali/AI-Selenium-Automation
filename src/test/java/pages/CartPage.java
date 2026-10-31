@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import io.qameta.allure.Step;
 
 import java.time.Duration;
 import java.util.List;
@@ -39,12 +40,14 @@ public class CartPage {
         return getFirstCartItem().findElement(By.className("cart_quantity")).getText();
     }
 
+    @Step("Remove the first product from the cart")
     public void removeFirstProduct() {
         WebElement removeButton = getFirstCartItem().findElement(By.cssSelector("button.cart_button"));
         wait.until(ExpectedConditions.elementToBeClickable(removeButton)).click();
         wait.until(currentDriver -> currentDriver.findElements(cartItems).isEmpty());
     }
 
+    @Step("Proceed to checkout")
     public void proceedToCheckout() {
         wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
     }

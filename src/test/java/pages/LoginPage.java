@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import io.qameta.allure.Step;
 
 import java.time.Duration;
 
@@ -21,14 +22,17 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    @Step("Enter username")
     public void enterUsername(String user) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(username)).sendKeys(user);
     }
 
+    @Step("Enter password")
     public void enterPassword(String pass) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(password)).sendKeys(pass);
     }
 
+    @Step("Click login")
     public void clickLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
     }

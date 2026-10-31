@@ -4,6 +4,7 @@ import base.BaseTest;
 import pages.CartPage;
 import pages.CheckoutPage;
 import pages.InventoryPage;
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,6 +16,7 @@ public class SauceDemoTest extends BaseTest {
     private static final String FIRST_PRODUCT_PRICE = "$29.99";
 
     @Test
+    @Description("Verifies that valid credentials sign in and open the inventory page.")
     public void loginWithValidCredentials() {
         loginPage.enterUsername(STANDARD_USERNAME);
         loginPage.enterPassword(STANDARD_PASSWORD);
@@ -23,10 +25,11 @@ public class SauceDemoTest extends BaseTest {
         InventoryPage inventoryPage = new InventoryPage(driver);
         Assert.assertTrue(inventoryPage.isAtInventoryPage(),
                 "Successful login should navigate to the inventory page.");
-        Assert.assertEquals(inventoryPage.getPageTitle(), "Products");
+        Assert.assertEquals(inventoryPage.getPageTitle(), "Productss");
     }
 
     @Test
+    @Description("Verifies that invalid credentials are rejected and an authentication error is shown.")
     public void loginWithInvalidCredentials() {
         loginPage.enterUsername(STANDARD_USERNAME);
         loginPage.enterPassword("invalid_password");
@@ -40,6 +43,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that submitting the login form with empty fields shows a required-username error.")
     public void loginWithEmptyFields() {
         loginPage.clickLogin();
 
@@ -50,6 +54,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that the inventory page displays six products with names and prices.")
     public void verifyInventoryProductsAreDisplayed() {
         InventoryPage inventoryPage = loginAsStandardUser();
 
@@ -62,6 +67,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that adding the first inventory product changes its action to Remove.")
     public void addProductToCart() {
         InventoryPage inventoryPage = loginAsStandardUser();
 
@@ -72,6 +78,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that the cart badge displays one after adding a product.")
     public void verifyCartBadgeCount() {
         InventoryPage inventoryPage = loginAsStandardUser();
 
@@ -82,6 +89,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies the product name, price, and quantity shown for an item in the cart.")
     public void verifyProductDetailsInCart() {
         InventoryPage inventoryPage = loginAsStandardUser();
         inventoryPage.addFirstProductToCart();
@@ -95,6 +103,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that removing the only cart product leaves the cart empty.")
     public void removeProductFromCart() {
         InventoryPage inventoryPage = loginAsStandardUser();
         inventoryPage.addFirstProductToCart();
@@ -108,6 +117,7 @@ public class SauceDemoTest extends BaseTest {
     }
 
     @Test
+    @Description("Verifies that checkout opens the customer information step.")
     public void navigateToCheckout() {
         InventoryPage inventoryPage = loginAsStandardUser();
         inventoryPage.addFirstProductToCart();
