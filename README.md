@@ -1,136 +1,126 @@
-![Java Selenium Tests](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/workflows/maven.yml/badge.svg?branch=master)
+# AI Selenium Automation
 
-# AI-Assisted Selenium Automation Framework
+[![Java Selenium Tests](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/workflows/maven.yml)
 
-A Java-based web automation framework built using Selenium WebDriver, TestNG, Maven, and the Page Object Model (POM). Selenium MCP and AI-assisted workflows were used to explore application behavior and support test scenario generation.
+A Java 17 and Selenium WebDriver test framework for automating the public [SauceDemo](https://www.saucedemo.com/) storefront. It uses TestNG, the Page Object Model, explicit waits, Allure reporting, and GitHub Actions to exercise login, inventory, cart, and checkout behavior.
 
-## Tech Stack
+## Technology stack
 
-- **Language:** Java
-- **Automation:** Selenium WebDriver
-- **Test Framework:** TestNG
-- **Build Tool:** Maven
-- **Design Pattern:** Page Object Model (POM)
-- **Browser:** Google Chrome
-- **AI Integration:** Selenium MCP with GitHub Copilot
-- **CI:** GitHub Actions
-- **Application Under Test:** SauceDemo
+- Java 17
+- Selenium WebDriver 4
+- TestNG
+- Maven
+- Allure TestNG and Allure Maven
+- Chrome and Microsoft Edge (headless execution)
+- GitHub Actions and GitHub Pages
 
-## Project Structure
+## Framework architecture
+
+Page objects own page-specific locators and actions; tests describe user-visible scenarios and assert their outcomes. `BaseTest` creates a fresh browser for each test and closes it afterward. The TestNG listener captures failed-test screenshots, saves them locally, and attaches them to Allure results.
 
 ```text
-AI-Selenium-Automation/
-├── .github/
-│   └── workflows/
-│       └── maven.yml
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── Main.java
-│   └── test/
-│       └── java/
-│           ├── base/
-│           │   └── BaseTest.java
-│           ├── pages/
-│           │   ├── LoginPage.java
-│           │   ├── InventoryPage.java
-│           │   ├── CartPage.java
-│           │   └── CheckoutPage.java
-│           └── tests/
-│               └── SauceDemoTest.java
-├── pom.xml
-└── README.md
+.
+├── .github/workflows/maven.yml
+├── docs/images/inventory.png
+├── src/test
+│   ├── java
+│   │   ├── base/BaseTest.java
+│   │   ├── listeners/TestListener.java
+│   │   ├── pages
+│   │   │   ├── CartPage.java
+│   │   │   ├── CheckoutPage.java
+│   │   │   ├── InventoryPage.java
+│   │   │   └── LoginPage.java
+│   │   └── tests/SauceDemoTest.java
+│   └── resources/allure.properties
+├── testng.xml
+└── pom.xml
 ```
 
-## Automated Test Scenarios
+### Page Object Model
 
-The framework currently covers nine scenarios:
+`LoginPage`, `InventoryPage`, `CartPage`, and `CheckoutPage` encapsulate their respective page interactions and stable application locators. `SauceDemoTest` uses those page objects to keep business flows separate from Selenium mechanics. `BaseTest` centralizes browser configuration, headless options, and test-level setup and cleanup.
 
-| # | Test Scenario |
+## Test coverage
+
+The suite executes **23 independent test cases**, including DataProvider cases:
+
+| Area | Scenarios |
 |---|---|
-| 1 | Login with valid credentials |
-| 2 | Login with invalid credentials |
-| 3 | Login with empty fields |
-| 4 | Verify inventory products |
-| 5 | Add a product to cart |
-| 6 | Verify shopping cart badge |
-| 7 | Verify cart product details |
-| 8 | Remove a product from cart |
-| 9 | Navigate to checkout |
+| Login (6) | Successful login; invalid username; invalid password; locked-out user; empty username; empty password |
+| Inventory (6) | Inventory title and six-product count; catalog names and prices; A–Z, Z–A, price low-to-high, and price high-to-low sorting |
+| Cart (6) | Add one product; add multiple products; badge count; product names, prices, and quantities; remove a product while retaining another; verify a new cart is empty |
+| Checkout (5) | End-to-end purchase and confirmation; required first name, last name, and postal code (three independent cases); item subtotal, tax, and grand total |
 
-## Framework Design
+Tests create a fresh browser session and start from the login page, so their results do not depend on execution order or shared cart state. SauceDemo does not provide product-category filtering, and this framework does not simulate it.
 
-- **BaseTest:** Manages WebDriver initialization and cleanup before and after each test.
-- **Page Object Model:** Separates page locators and interactions from test logic.
-- **TestNG:** Organizes test scenarios and assertions.
-- **Maven:** Manages project dependencies and test execution.
-- **Explicit Waits:** Synchronizes browser interactions with page elements.
-- **Headless Chrome:** Supports browser execution without a visible UI, including CI environments.
+## Browser support
 
-## AI-Assisted Test Development
+Chrome is the default browser. Choose Chrome or Edge with the `browser` system property:
 
-Selenium MCP was used with GitHub Copilot to:
+```powershell
+mvn -B clean test -Dbrowser=chrome
+mvn -B clean test -Dbrowser=edge
+```
 
-1. Explore the SauceDemo application through browser automation.
-2. Identify page elements, locators, and application workflows.
-3. Discover relevant functional test scenarios.
-4. Assist in generating Java Selenium test code.
-5. Organize the generated tests using POM and TestNG.
-6. Review, refine, and validate the implementation through test execution.
+Both browser configurations use headless mode, including local runs. Selenium Manager resolves the browser driver; install a compatible browser on the machine running the suite.
 
-The generated code was reviewed and tested independently of the MCP exploration workflow.
+## Local setup
 
-## Running the Tests Locally
-
-### Prerequisites
-
-- JDK 17 or later
-- Maven 3.10+
-- Google Chrome
-
-### Execute tests
-
-Clone the repository:
+Prerequisites: JDK 17, Maven, and Chrome or Edge.
 
 ```bash
 git clone https://github.com/shiyashalmali/AI-Selenium-Automation.git
-```
-
-Navigate to the project directory:
-
-```bash
 cd AI-Selenium-Automation
-```
-
-Run the test suite:
-
-```bash
-mvn clean test
-```
-
-## Continuous Integration
-
-GitHub Actions is configured to execute the Maven test suite automatically on:
-
-- Pushes to the `master` branch
-- Pull requests targeting the `master` branch
-- Manual workflow dispatch
-
-The workflow checks out the repository, configures Java 17, and executes:
-
-```bash
 mvn -B clean test
 ```
 
-## Application Under Test
+Run one test method:
 
-SauceDemo: https://www.saucedemo.com/
+```bash
+mvn -Dtest=SauceDemoTest#invalidUsernameIsRejected test
+```
 
-Public test credentials:
+Run the checkout validation cases by method:
 
-- Username: `standard_user`
-- Password: `secret_sauce`
+```bash
+mvn -Dtest=SauceDemoTest#checkoutRequiresMandatoryInformation test
+```
 
----
+Test reports and runtime screenshots are written under ignored build/output directories and are not committed.
 
-**Project Focus:** Java Selenium Automation | AI-Assisted Testing | MCP | TestNG | Maven | Page Object Model | GitHub Actions
+## Allure reports
+
+The Maven test run writes Allure result files to `target/allure-results`. Generate the HTML report after running tests:
+
+```bash
+mvn -B allure:report
+```
+
+Open `target/site/allure-maven-plugin/index.html` in a browser. The report includes failure screenshots when a test fails. CI uploads both the results and generated HTML report as workflow artifacts.
+
+## GitHub Actions and live report
+
+The workflow runs on pushes and pull requests targeting `master`, and on manual dispatch. It uses Java 17, Maven dependency caching, and `mvn -B clean test`. It generates and uploads Allure results and the HTML report even if tests fail; the test job remains failed so failures are not hidden.
+
+The latest published report is intended to be available at **[GitHub Pages Allure report](https://shiyashalmali.github.io/AI-Selenium-Automation/)**. Pages deployment runs only for `master`, never for pull requests.
+
+**One-time repository setup:** In the repository's **Settings → Pages**, set the build and deployment source to **GitHub Actions**. The workflow supplies the required Pages and OIDC deployment permissions.
+
+## Screenshot
+
+The repository includes an existing SauceDemo inventory screenshot:
+
+![SauceDemo inventory page](docs/images/inventory.png)
+
+## Scope and limitations
+
+- This is a UI regression suite for the public SauceDemo application, not a production storefront.
+- It covers login, inventory sorting and display, cart operations, and checkout; it does not cover APIs, databases, payment processing, or native category filters.
+- The GitHub Actions workflow runs the default Chrome configuration. Edge is configurable for local runs but is not separately exercised in CI.
+- The hosted Allure report is updated only by a successful report-generation step on `master`; access to GitHub Pages must be enabled once in repository settings.
+
+## Repository metadata recommendation
+
+- **Description:** Java Selenium automation framework using TestNG, Page Object Model, Allure reporting and GitHub Actions CI.
+- **Topics:** `selenium`, `java`, `testng`, `page-object-model`, `maven`, `allure`, `github-actions`, `test-automation`

@@ -1,24 +1,21 @@
-# Maven build output
+# Maven output and generated Allure reports
 target/
-
-# Allure generated files
-.allure/
 allure-results/
 allure-report/
+.allure/
 
-# Runtime screenshots
+# Runtime failure screenshots
 screenshots/
 
-# IDE files
+# IDE and editor files
 .idea/
+.vscode/
 *.iml
 .classpath
 .project
 .settings/
 
-# Logs
+# Logs and operating system files
 *.log
-
-# OS files
 .DS_Store
 Thumbs.db

@@ -37,6 +37,13 @@ public class LoginPage {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
     }
 
+    @Step("Log in with the provided credentials")
+    public void login(String usernameValue, String passwordValue) {
+        enterUsername(usernameValue);
+        enterPassword(passwordValue);
+        clickLogin();
+    }
+
     public String getErrorMessage() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
     }

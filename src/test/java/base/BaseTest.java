@@ -12,13 +12,14 @@ import pages.LoginPage;
 
 public class BaseTest {
 
+    private static final String BASE_URL = "https://www.saucedemo.com/";
     protected WebDriver driver;
     protected LoginPage loginPage;
 
     @BeforeMethod
     public void setUp() {
-        String browser = System.getProperty("browser", "chrome").toLowerCase();
-        boolean isCi = System.getenv("CI") != null;
+        String browser = System.getProperty("browser", "chrome").toLowerCase(java.util.Locale.ROOT);
+        boolean isCi = Boolean.parseBoolean(System.getenv("CI"));
 
         switch (browser) {
             case "chrome" -> {
@@ -41,11 +42,11 @@ public class BaseTest {
                     "Unsupported browser: '" + browser + "'. Supported browsers are 'chrome' and 'edge'.");
         }
 
-        driver.get("https://www.saucedemo.com/");
+        driver.get(BASE_URL);
         loginPage = new LoginPage(driver);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         if (driver != null) {
             driver.quit();
@@ -53,6 +54,6 @@ public class BaseTest {
     }
 
     public WebDriver getDriver() {
-    return driver;
-}
+        return driver;
+    }
 }

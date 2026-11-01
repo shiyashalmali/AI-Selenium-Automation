@@ -1,11 +1,11 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import io.qameta.allure.Step;
 
 import java.time.Duration;
 import java.util.List;
@@ -16,6 +16,9 @@ public class CartPage {
     private final WebDriverWait wait;
     private final By pageTitle = By.className("title");
     private final By cartItems = By.className("cart_item");
+    private final By productName = By.className("inventory_item_name");
+    private final By productPrice = By.className("inventory_item_price");
+    private final By productQuantity = By.className("cart_quantity");
     private final By checkoutButton = By.id("checkout");
 
     public CartPage(WebDriver driver) {
@@ -24,37 +27,55 @@ public class CartPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
     }
 
+    public String getPageTitle() {
+        return driver.findElement(pageTitle).getText();
+    }
+
     public int getCartItemCount() {
         return driver.findElements(cartItems).size();
     }
 
-    public String getFirstProductName() {
-        return getFirstCartItem().findElement(By.className("inventory_item_name")).getText();
+    public List<String> getProductNames() {
+        return getCartItems().stream()
+                .map(item -> item.findElement(productName).getText())
+                .toList();
     }
 
-    public String getFirstProductPrice() {
-        return getFirstCartItem().findElement(By.className("inventory_item_price")).getText();
+    public List<String> getProductPrices() {
+        return getCartItems().stream()
+                .map(item -> item.findElement(productPrice).getText())
+                .toList();
     }
 
-    public String getFirstProductQuantity() {
-        return getFirstCartItem().findElement(By.className("cart_quantity")).getText();
+    public List<String> getProductQuantities() {
+        return getCartItems().stream()
+                .map(item -> item.findElement(productQuantity).getText())
+                .toList();
     }
 
-    @Step("Remove the first product from the cart")
-    public void removeFirstProduct() {
-        WebElement removeButton = getFirstCartItem().findElement(By.cssSelector("button.cart_button"));
+    public boolean isCartEmpty() {
+        return getCartItemCount() == 0;
+    }
+
+    @Step("Remove {productNameValue} from the cart")
+    public void removeProduct(String productNameValue) {
+        WebElement cartItem = wait.until(currentDriver -> getCartItems().stream()
+                .filter(item -> item.findElement(productName).getText().equals(productNameValue))
+                .findFirst()
+                .orElse(null));
+        WebElement removeButton = cartItem.findElement(By.cssSelector("button.cart_button"));
         wait.until(ExpectedConditions.elementToBeClickable(removeButton)).click();
-        wait.until(currentDriver -> currentDriver.findElements(cartItems).isEmpty());
+        wait.until(currentDriver -> getCartItems().stream()
+                .noneMatch(item -> item.findElement(productName).getText().equals(productNameValue)));
     }
 
     @Step("Proceed to checkout")
     public void proceedToCheckout() {
         wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
+        wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
     }
 
-    private WebElement getFirstCartItem() {
-        List<WebElement> items = wait.until(
-                ExpectedConditions.presenceOfAllElementsLocatedBy(cartItems));
-        return items.get(0);
+    private List<WebElement> getCartItems() {
+        return driver.findElements(cartItems);
     }
 }
