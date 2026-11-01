@@ -1,4 +1,4 @@
-![Java Selenium Tests](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/maven.yml/badge.svg?branch=master)
+![Java Selenium Tests](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/workflows/maven.yml/badge.svg?branch=master)
 
 # AI-Assisted Selenium Automation Framework
 
