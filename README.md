@@ -1,3 +1,5 @@
+![Java Selenium Tests](https://github.com/shiyashalmali/AI-Selenium-Automation/actions/maven.yml/badge.svg?branch=master)
+
 # AI-Assisted Selenium Automation Framework
 
 A Java-based web automation framework built using Selenium WebDriver, TestNG, Maven, and the Page Object Model (POM). Selenium MCP and AI-assisted workflows were used to explore application behavior and support test scenario generation.
