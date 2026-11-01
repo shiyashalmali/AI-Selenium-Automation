@@ -112,8 +112,8 @@ mvn clean test
 
 GitHub Actions is configured to execute the Maven test suite automatically on:
 
-- Pushes to the `main` branch
-- Pull requests targeting the `main` branch
+- Pushes to the `master` branch
+- Pull requests targeting the `master` branch
 - Manual workflow dispatch
 
 The workflow checks out the repository, configures Java 17, and executes:
