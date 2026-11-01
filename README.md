@@ -41,6 +41,8 @@ Page objects own page-specific locators and actions; tests describe user-visible
 
 `LoginPage`, `InventoryPage`, `CartPage`, and `CheckoutPage` encapsulate their respective page interactions and stable application locators. `SauceDemoTest` uses those page objects to keep business flows separate from Selenium mechanics. `BaseTest` centralizes browser configuration, headless options, and test-level setup and cleanup.
 
+Failure screenshots are captured automatically through a TestNG `ITestListener` implementation in `onTestFailure`; it obtains the test's driver through `BaseTest.getDriver()` and attaches the image to Allure.
+
 ## Test coverage
 
 The suite executes **23 independent test cases**, including DataProvider cases:
@@ -67,7 +69,7 @@ Both browser configurations use headless mode, including local runs. Selenium Ma
 
 ## Local setup
 
-Prerequisites: JDK 17, Maven, and Chrome or Edge.
+Prerequisites: JDK 17, Maven 3.9.x, and Chrome or Edge.
 
 ```bash
 git clone https://github.com/shiyashalmali/AI-Selenium-Automation.git
@@ -120,7 +122,7 @@ The repository includes an existing SauceDemo inventory screenshot:
 - The GitHub Actions workflow runs the default Chrome configuration. Edge is configurable for local runs but is not separately exercised in CI.
 - The hosted Allure report is updated only by a successful report-generation step on `master`; access to GitHub Pages must be enabled once in repository settings.
 
-## Repository metadata recommendation
+## Repository metadata
 
 - **Description:** Java Selenium automation framework using TestNG, Page Object Model, Allure reporting and GitHub Actions CI.
-- **Topics:** `selenium`, `java`, `testng`, `page-object-model`, `maven`, `allure`, `github-actions`, `test-automation`
+- **Topics:** `selenium`, `java`, `testng`, `maven`, `page-object-model`
